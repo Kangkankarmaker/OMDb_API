@@ -156,7 +156,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="-10dp"
             android:layout_marginLeft="-10dp"
-            android:text="|"
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="@+id/details_movie_lang"
             app:layout_constraintEnd_toStartOf="@+id/details_movie_type"

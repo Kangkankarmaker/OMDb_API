@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -35,12 +39,13 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private RecyclerView MovieRV;
     private EditText editText;
     private Button button_search;
+    private TextView total_result;
     Movie_adapter adapter;
 
-    List<MovieResponse> respons =new ArrayList<MovieResponse>();
+    List<MovieSearch> respons =new ArrayList<MovieSearch>();
     Movie movie;
 
-    private static final String BASE_URL="http://www.omdbapi.com/?t=";
+    private static final String BASE_URL="http://www.omdbapi.com/";
     private static final String API_KEY="473ebeb0";
 
 
@@ -56,10 +61,12 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         MovieRV=findViewById(R.id.rv_movie);
         editText=findViewById(R.id.ext_movie_name);
         button_search=findViewById(R.id.btn_search_movie);
+        total_result=findViewById(R.id.total_result);
 
         button_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeKeyboard();
                 String mv_name=editText.getText().toString();
                 if (mv_name .isEmpty()) {
                    Toast.makeText(MainActivity.this, "Enter a Movie Name", Toast.LENGTH_SHORT).show();
@@ -84,53 +91,62 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
                 .build();
         movie = retrofit.create(Movie.class);
 
-        Call<MovieResponse> call =movie.getMovie(mv_name,API_KEY);
-        call.enqueue(new Callback<MovieResponse>() {
+        Call<MovieSearch> call =movie.getMovie(mv_name,API_KEY);
+        call.enqueue(new Callback<MovieSearch>() {
             @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+            public void onResponse(Call<MovieSearch> call, Response<MovieSearch> response) {
 
 
                 respons = Collections.singletonList(response.body());
 
-                List<MovieResponse> movieResponse= Collections.singletonList(response.body());
-                for (MovieResponse a : movieResponse)
+                List<MovieSearch> movie= Collections.singletonList(response.body());
+                for (MovieSearch a : movie)
                 {
                     if (a.getResponse().equals("False"))
                     {
                         Toast.makeText(MainActivity.this, "Movie not found!", Toast.LENGTH_LONG).show();
                     }else {
-                        adapter=new Movie_adapter(getApplicationContext(), respons,MainActivity.this);
+                        List<MovieResponse> search=a.getSearch();
+                        adapter=new Movie_adapter(getApplicationContext(), search,MainActivity.this);
                         MovieRV.setAdapter(adapter);
                         MovieRV.setLayoutManager(new LinearLayoutManager(getApplicationContext(),
                                 LinearLayoutManager.VERTICAL,false));
+
+                        total_result.setText("Total Result :"+a.getTotalResults());
                     }
                 }
 
             }
 
             @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
+            public void onFailure(Call<MovieSearch> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.d("error",t.getMessage());
             }
         });
     }
 
-
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
     @Override
     public void onMovieClick(MovieResponse movie) {
 
         Intent intent=new Intent(this,MovieDetailsActivity.class);
-        intent.putExtra("mv_id",movie.getDVD());
+        intent.putExtra("mv_id",movie.getTitle());
         intent.putExtra("title",movie.getTitle());
         intent.putExtra("image",movie.getPoster());
         intent.putExtra("imageCover",movie.getPoster());
-        intent.putExtra("dics",movie.getPlot());
+        //intent.putExtra("dics",movie.getPlot());
         intent.putExtra("year",movie.getYear());
         intent.putExtra("type",movie.getType());
-        intent.putExtra("language",movie.getLanguage());
-        intent.putExtra("rate",movie.getImdbRating());
-        intent.putExtra("cast",movie.getActors());
+        //intent.putExtra("language",movie.getLanguage());
+        intent.putExtra("rate",movie.getImdbID());
+        //intent.putExtra("cast",movie.getActors());
 
         startActivity(intent);
 

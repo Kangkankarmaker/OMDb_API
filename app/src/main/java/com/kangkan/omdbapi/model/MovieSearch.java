@@ -6,7 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class MovieSearch implements Serializable {
+public class MovieSearch {
+
     @SerializedName("Search")
     @Expose
     private List<MovieResponse> search = null;

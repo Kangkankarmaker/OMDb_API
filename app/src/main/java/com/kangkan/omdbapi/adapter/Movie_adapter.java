@@ -45,11 +45,8 @@ public class Movie_adapter extends RecyclerView.Adapter<Movie_adapter.MyViewHold
 
         holder.title.setText(mData.get(position).getTitle());
         holder.year.setText(mData.get(position).getYear());
-        holder.rel.setText(mData.get(position).getReleased());
-        holder.genre.setText(mData.get(position).getCountry());
-        holder.language.setText(mData.get(position).getLanguage());
-        holder.runtime.setText(mData.get(position).getRuntime());
-        holder.director.setText(mData.get(position).getDirector());
+        holder.rel.setText(mData.get(position).getType());
+        holder.genre.setText(mData.get(position).getImdbID());
 
         String photoString = mData.get(position).getPoster();
         Uri photoUri = Uri.parse(photoString);

@@ -82,7 +82,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="Language"
         android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@+id/item_movie_Genre"
         app:layout_constraintTop_toTopOf="@+id/item_movie_Genre" />
@@ -103,7 +102,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="TextView"
 
         android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@+id/textView6"

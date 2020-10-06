@@ -12,9 +12,9 @@ public interface Movie {
 
 
     @GET("?")
-    Call<MovieResponse> getMovie(
+    Call<MovieSearch> getMovie(
 
-            @Query("t")String title,
+            @Query("s")String title,
             @Query("apikey")String apikey
     );
 }

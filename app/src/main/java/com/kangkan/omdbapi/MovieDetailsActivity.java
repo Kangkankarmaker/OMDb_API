@@ -61,23 +61,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Uri poster = Uri.parse(imageRec);
 
-        Uri coverImg = Uri.parse(imageRecCover);
-        Picasso.get().load(poster).into(movieImg);
-        Picasso.get().load(coverImg).into(movieCoverimg);
+        try {
+            Uri coverImg = Uri.parse(imageRecCover);
+            Picasso.get().load(poster).into(movieImg);
+            Picasso.get().load(coverImg).into(movieCoverimg);
 
-        title.setText(movieTitle);
-        titleDec.setText(movieDec);
-        year.setText(movieYear);
-        language.setText(movieLanguage);
-        type.setText(movieType);
-        ret_person.setText(movieRate);
-        mv_cast.setText(moviecast);
-
-
-        assert movieRate != null;
-        rBar.setRating(Float.parseFloat(movieRate));
+            title.setText(movieTitle);
+            titleDec.setText(movieDec);
+            year.setText(movieYear);
+            language.setText(movieLanguage);
+            type.setText(movieType);
+            ret_person.setText(movieRate);
+            mv_cast.setText(moviecast);
 
 
-
+            assert movieRate != null;
+            rBar.setRating(Float.parseFloat(movieRate));
+        }catch (Exception e){}
     }
 }
